@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Download Div Content as PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+</head>
+<body>
+    <div id="content">
+        <!-- Your content goes here -->
+        <h1>PDF Content</h1>
+        <p>This is some content inside a div.</p>
+    </div>
+
+    <button id="download-button">Download PDF</button>
+
+    <script>
+        document.getElementById('download-button').addEventListener('click', function () {
+            // Get the content of the div
+            const content = document.getElementById('content').innerText;
+
+            // Create the PDF document definition
+            const pdfDefinition = {
+                content: [
+                    { text: "Text Content in a Div", style: "header" },
+                    { text: content }
+                ],
+                styles: {
+                    header: {
+                        fontSize: 18,
+                        bold: true,
+                        margin: [0, 0, 0, 10]
+                    }
+                }
+            };
+
+            // Generate and download the PDF
+            pdfMake.createPdf(pdfDefinition).download('div_content.pdf');
+        });
+    </script>
+</body>
+</html>

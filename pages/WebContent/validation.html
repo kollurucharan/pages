@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabbed Page</title>
+<style>
+/* Basic styles for tabs */
+.tab {
+    display: none;
+}
+
+.tab-button {
+    cursor: pointer;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    border-radius: 5px 5px 0 0;
+}
+
+.tab-content {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 0 0 5px 5px;
+}
+
+.validation-error {
+    color: red;
+    font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<h1>hello</h1>
+<div class="tab-container">
+    <button class="tab-button">Tab 1</button>
+    <button class="tab-button">Tab 2</button>
+    <button class="tab-button">Tab 3</button>
+
+    <form action="www.github.com" method="GET" id="myForm">
+        <div id="tab1" class="tab">
+            <h2>Customer Details</h2>
+
+            <label for="fName">First Name:</label>
+            <input type="text" id="fName" name="fName" pattern="[A-Za-z]+" title="Only alphabetic characters allowed" required><br>
+            <div id="fNameError" class="validation-error"></div><br>
+
+            <label for="lName">Last Name:</label>
+            <input type="text" id="lName" name="lName" pattern="[A-Za-z]+" title="Only alphabetic characters allowed" required><br>
+            <div id="lNameError" class="validation-error"></div><br>
+
+            <label for="dob">DOB:</label>
+            <input type="date" id="dob" name="dob" required min="1920-06-01"><br>
+            <div id="dobError" class="validation-error"></div><br>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required><br>
+            <div id="addressError" class="validation-error"></div><br>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="">Select</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select><br>
+            <div id="genderError" class="validation-error"></div><br>
+
+            <label for="aadhar">Aadhar No:</label>
+            <input type="text" id="aadhar" name="aadhar" pattern="\d{12}" title="Aadhar number must be 12 digits" required><br>
+            <div id="aadharError" class="validation-error"></div><br>
+
+            <button type="button" id="nextTab2" onclick="validateTab('tab1', 'tab2')">Next</button>
+        </div>
+
+        <div id="tab2" class="tab">
+            <h2>Family Details</h2>
+
+            <label for="mName">Member Name:</label>
+            <input type="text" id="mName" name="mName" pattern="[A-Za-z]+" title="Only alphabetic characters allowed" required><br>
+            <div id="mNameError" class="validation-error"></div><br>
+
+            <label for="dob2">DOB:</label>
+            <input type="date" id="dob2" name="dob2" required min="1920-06-01"><br>
+            <div id="dob2Error" class="validation-error"></div><br>
+
+            <label for="healthHistory">Health History:</label>
+            <input type="text" id="healthHistory" name="healthHistory" required><br>
+            <div id="healthHistoryError" class="validation-error"></div><br>
+
+            <label for="relationship">Relationship:</label>
+            <select id="relationship" name="relationship" required>
+                <option value="">Select</option>
+                <option value="father">Father</option>
+                <option value="mother">Mother</option>
+                <option value="sister">Sister</option>
+                <option value="brother">Brother</option>
+                <option value="spouse">Spouse</option>
+                <option value="self">Self</option>
+            </select><br>
+            <div id="relationshipError" class="validation-error"></div><br>
+
+            <button type="button" id="PreviouTab1" onclick="goToTab('tab1')">Previous</button>
+            <button type="button" id="nextTab3" onclick="validateTab('tab2', 'tab3')">Next</button>
+        </div>
+
+        <div id="tab3" class="tab">
+            <h2>Packages</h2>
+            <button type="button" id="PreviouTab2" onclick="validateTab('tab3', 'tab2')">Previous</button>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // JavaScript function to switch between tabs
+    function openTab(evt, tabName) {
+        var i, tab, tabButton;
+
+        // Hide all tabs and reset tab buttons
+        tab = document.getElementsByClassName("tab");
+        for (i = 0; i < tab.length; i++) {
+            tab[i].style.display = "none";
+        }
+
+        tabButton = document.getElementsByClassName("tab-button");
+        for (i = 0; i < tabButton.length; i++) {
+            tabButton[i].style.backgroundColor = "#f0f0f0";
+        }
+
+        // Show the selected tab and highlight its button
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.style.backgroundColor = "#ccc";
+    }
+
+    // Show the first tab by default
+    document.getElementById("tab1").style.display = "block";
+
+    // Validation function for individual input fields
+    function validateInput(inputId, errorId, pattern, title) {
+        const input = document.getElementById(inputId);
+        const errorElement = document.getElementById(errorId);
+        const value = input.value;
+
+        if (pattern && !RegExp(pattern).test(value)) {
+            errorElement.textContent = title;
+        } else {
+            errorElement.textContent = '';
+        }
+    }
+
+    // Validation function for a tab
+    function validateTab(currentTabId, nextTabId) {
+        // Implement custom validation logic here if needed
+        let isValid = true;
+
+        if (currentTabId === 'tab1') {
+            validateInput("fName", "fNameError", "[A-Za-z]+", "Only alphabetic characters allowed");
+            validateInput("lName", "lNameError", "[A-Za-z]+", "Only alphabetic characters allowed");
+            validateInput("dob", "dobError", "", "");
+            validateInput("address", "addressError", "", "");
+            validateInput("gender", "genderError", "", "");
+            validateInput("aadhar", "aadharError", "\\d{12}", "Aadhar number must be 12 digits");
+
+            // Check if there are any validation errors in tab 1
+            const errorElements = document.querySelectorAll("#" + currentTabId + " .validation-error");
+            errorElements.forEach(function (errorElement) {
+                if (errorElement.textContent) {
+                    isValid = false;
+                }
+            });
+
+            // Additional validation for date and dropdown
+            const dobValue = document.getElementById("dob").value;
+            const genderValue = document.getElementById("gender").value;
+            const addressValue = document.getElementById("address").value;
+
+            if (dobValue === "") {
+                document.getElementById("dobError").textContent = "Please select a date.";
+                isValid = false;
+            }
+
+            if (genderValue === "") {
+                document.getElementById("genderError").textContent = "Please select a gender.";
+                isValid = false;
+            }
+
+            if (addressValue === "") {
+                document.getElementById("addressError").textContent = "Please enter an address.";
+                isValid = false;
+            }
+        } else if (currentTabId === 'tab2') {
+            // Validate tab 2 fields
+            validateInput("mName", "mNameError", "[A-Za-z]+", "Only alphabetic characters allowed");
+            validateInput("dob2", "dob2Error", "", "");
+            validateInput("healthHistory", "healthHistoryError", "", ""); // Validation for Health History field
+            validateInput("relationship", "relationshipError", "", "");
+
+            // Check if there are any validation errors in tab 2
+            const errorElements = document.querySelectorAll("#" + currentTabId + " .validation-error");
+            errorElements.forEach(function (errorElement) {
+                if (errorElement.textContent) {
+                    isValid = false;
+                }
+            });
+
+            // Additional validation for date and dropdown
+            const dob2Value = document.getElementById("dob2").value;
+            const hhvalue = document.getElementById("healthHistory").value;
+            const relationshipValue = document.getElementById("relationship").value;
+
+            if (dob2Value === "") {
+                document.getElementById("dob2Error").textContent = "Please select a date.";
+                isValid = false;
+            }
+
+            if (hhvalue === "") {
+                document.getElementById("healthHistoryError").textContent = "Please Enter Health History Data";
+                isValid = false;
+            }
+
+            if (relationshipValue === "") {
+                document.getElementById("relationshipError").textContent = "Please select a relationship.";
+                isValid = false;
+            }
+        }
+
+        if (isValid) {
+            openTab({ currentTarget: document.getElementById(currentTabId) }, nextTabId);
+        } else {
+            alert("Please fill in all required fields correctly.");
+        }
+    }
+
+    // Function to go to a specific tab without validation
+    function goToTab(tabName) {
+        openTab({ currentTarget: document.getElementById(tabName) }, tabName);
+    }
+
+    // Set max date for DOB and DOB2 fields (3 months ago)
+    function setMaxDate(inputId, monthsAgo) {
+        const input = document.getElementById(inputId);
+        const currentDate = new Date();
+        currentDate.setMonth(currentDate.getMonth() - monthsAgo);
+        const maxDate = currentDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+        input.setAttribute('max', maxDate);
+    }
+
+    // Call the function to set max date for DOB and DOB2 fields (3 months ago)
+    setMaxDate('dob', 3);
+    setMaxDate('dob2', 3);
+
+    // Event listeners for input validation
+    document.getElementById("fName").addEventListener("blur", () => {
+        validateInput("fName", "fNameError", "[A-Za-z]+", "Only alphabetic characters allowed");
+    });
+
+    document.getElementById("lName").addEventListener("blur", () => {
+        validateInput("lName", "lNameError", "[A-Za-z]+", "Only alphabetic characters allowed");
+    });
+
+    document.getElementById("dob").addEventListener("blur", () => {
+        validateInput("dob", "dobError", "", "");
+    });
+
+    document.getElementById("address").addEventListener("blur", () => {
+        validateInput("address", "addressError", "", "");
+    });
+
+    document.getElementById("gender").addEventListener("change", () => {
+        validateInput("gender", "genderError", "", "");
+    });
+
+    document.getElementById("aadhar").addEventListener("blur", () => {
+        validateInput("aadhar", "aadharError", "\\d{12}", "Aadhar number must be 12 digits");
+    });
+
+    document.getElementById("mName").addEventListener("blur", () => {
+        validateInput("mName", "mNameError", "[A-Za-z]+", "Only alphabetic characters allowed");
+    });
+
+    document.getElementById("dob2").addEventListener("blur", () => {
+        validateInput("dob2", "dob2Error", "", "");
+    });
+
+    document.getElementById("healthHistory").addEventListener("blur", () => {
+        validateInput("healthHistory", "healthHistoryError", "", "");
+    });
+
+    document.getElementById("relationship").addEventListener("change", () => {
+        validateInput("relationship", "relationshipError", "", "");
+    });
+
+</script>
+</body>
+</html>
